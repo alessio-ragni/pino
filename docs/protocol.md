@@ -1,6 +1,6 @@
 # The protocol between tablet and server
 
-One websocket: `ws://<server>:4390/ws?token=<FRANKINO_TOKEN>&device=<name>`.
+One websocket: `ws://<server>:4390/ws?token=<PINO_TOKEN>&device=<name>`.
 Wrong token → the server closes with code 4401.
 
 Text messages are JSON with a `type` field. Audio travels in binary frames:
@@ -13,7 +13,7 @@ How the whole thing behaves, without code, is in [`how-it-works.md`](how-it-work
 
 | type | fields | what it means |
 |---|---|---|
-| `start` | `rate` (default 16000), `why` | I am about to send voice. If Frankino was speaking, it goes quiet (except with `barge`). `why` says why the tablet is listening: `name` (it heard the name; also the value when missing), `follow` (right after an answer, without the name), `button` (the circle), `key` (side key), `barge` (it heard the name while Frankino was speaking: the voice is only turned down until the server decides) |
+| `start` | `rate` (default 16000), `why` | I am about to send voice. If Pino was speaking, it goes quiet (except with `barge`). `why` says why the tablet is listening: `name` (it heard the name; also the value when missing), `follow` (right after an answer, without the name), `button` (the circle), `key` (side key), `barge` (it heard the name while Pino was speaking: the voice is only turned down until the server decides) |
 | *(binary)* | PCM | pieces of voice, between `start` and `end` |
 | `end` | `rate` | I have finished speaking: transcribe and answer |
 | `text` | `text` | a written sentence, instead of voice |
@@ -42,7 +42,7 @@ others reach Claude as a sentence.
 | `card_closed` | `id` | that card is gone |
 | `cards_reset` | — | sent right after `ready`: forget your cards, the server sends them all again |
 | `focus` | `id` | bring that card in front |
-| `ring` | `id`, `kind`, `label` | a timer, reminder or Frankino-rung alarm is due: ring until the person stops it |
+| `ring` | `id`, `kind`, `label` | a timer, reminder or Pino-rung alarm is due: ring until the person stops it |
 | `device` | `id`, `action`, … | do something on the device and answer with `device_result`. `set_alarm` (`hour`, `minute`, `days` ISO 1-7, `label`) puts an alarm on the Clock app; `show_alarms` opens its list |
 | `done` | `ms` | end of the turn, after the last sentence: listening can start again |
 | `ignored` | `reason` | no answer is coming: go back to waiting for the name, with no follow-up. Reasons below; `stop` means the person said «stop», «basta» or «grazie» |
@@ -63,19 +63,19 @@ When Claude wants to use a tool that is not read-only, the server sends an A2UI 
 `surfaceId: "conferma"` and says «Lo faccio?» (shall I do it?). The answer can come by voice («sì»,
 «no», «non chiedermelo più»: yes, no, don't ask me again) or with the buttons (`confirm_*`). After
 the answer the surface is removed with `deleteSurface`. No answer within
-`FRANKINO_CONFIRM_TIMEOUT_S` counts as no.
+`PINO_CONFIRM_TIMEOUT_S` counts as no.
 
-## Not meant for Frankino
+## Not meant for Pino
 
 The tablet wakes up with its own recognizer, which can be wrong. The server checks again on the
 real transcript:
 
 - `why: name` and the sentence does not start with the name (at most after two greetings such as
   «ehi», «ciao», «senti»): `ignored` with `reason: "non chiamato"` (not called);
-- `why: follow` and the sentence is the echo of what Frankino has just said: `ignored`, `"eco"`
+- `why: follow` and the sentence is the echo of what Pino has just said: `ignored`, `"eco"`
   (echo);
 - `why: barge` and the sentence does not start with the name, or is his own echo: `ignored`,
-  `"eco"`. The tablet turns the voice back up and Frankino carries on;
+  `"eco"`. The tablet turns the voice back up and Pino carries on;
 - `why: follow` and Claude judges that people were talking to each other (it answers only «…»):
   `ignored`, `"non per me"` (not for me).
 

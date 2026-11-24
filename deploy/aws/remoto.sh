@@ -1,8 +1,8 @@
 #!/bin/bash
-# Runs a command on the Frankino machine through SSM (no open port, no SSH key) and prints its
+# Runs a command on the Pino machine through SSM (no open port, no SSH key) and prints its
 # output. Examples:
 #
-#   AWS_PROFILE=<profile> deploy/aws/remoto.sh 'journalctl -u frankino -n 50 --no-pager'
+#   AWS_PROFILE=<profile> deploy/aws/remoto.sh 'journalctl -u pino -n 50 --no-pager'
 #   AWS_PROFILE=<profile> deploy/aws/remoto.sh aggiorna     # git pull + restart
 #   AWS_PROFILE=<profile> deploy/aws/remoto.sh segreti      # re-reads the secrets from SSM and restarts
 #   AWS_PROFILE=<profile> deploy/aws/remoto.sh registro 6   # the journal: last 6 hours of questions, timings, tools
@@ -12,20 +12,20 @@ set -euo pipefail
 
 : "${AWS_PROFILE:?set AWS_PROFILE}"
 export AWS_REGION="${AWS_REGION:-eu-west-1}"
-NAME="${FRANKINO_NAME:-frankino}"
+NAME="${PINO_NAME:-pino}"
 CMD="${1:?which command?}"
 HOURS="${2:-24}"
 
 case "$CMD" in
   aggiorna|update)
-    CMD='cd /opt/frankino && sudo -u frankino git pull --ff-only &&
-      sudo -u frankino server/.venv/bin/pip install --quiet -e server &&
-      systemctl restart frankino && sleep 3 && systemctl --no-pager status frankino | head -5' ;;
+    CMD='cd /opt/pino && sudo -u pino git pull --ff-only &&
+      sudo -u pino server/.venv/bin/pip install --quiet -e server &&
+      systemctl restart pino && sleep 3 && systemctl --no-pager status pino | head -5' ;;
   registro|journal)
-    CMD="DATA=\$(grep ^FRANKINO_DATA= /etc/frankino/config | cut -d= -f2); cd /opt/frankino/server &&
-      sudo -u frankino .venv/bin/python -m frankino.journal --db \$DATA/frankino.db --hours $HOURS" ;;
+    CMD="DATA=\$(grep ^PINO_DATA= /etc/pino/config | cut -d= -f2); cd /opt/pino/server &&
+      sudo -u pino .venv/bin/python -m pino.journal --db \$DATA/pino.db --hours $HOURS" ;;
   segreti|secrets)
-    CMD='systemctl restart frankino-secrets frankino && sleep 3 && systemctl --no-pager status frankino | head -5' ;;
+    CMD='systemctl restart pino-secrets pino && sleep 3 && systemctl --no-pager status pino | head -5' ;;
 esac
 
 ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$NAME" "Name=instance-state-name,Values=running" \

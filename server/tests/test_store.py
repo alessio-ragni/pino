@@ -1,7 +1,7 @@
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
-from frankino.store import Store
+from pino.store import Store
 
 
 def test_after_thirty_days_audio_goes_text_stays(settings):

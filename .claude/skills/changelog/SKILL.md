@@ -1,11 +1,11 @@
 ---
 name: changelog
-description: Writes the CHANGELOG.md entry for the work just done, for someone who uses Frankino and does not read code, and brings README.md and the docs/ guides up to date in the same pass. Use it whenever the user wants to commit, push or release in this repository, in whatever words or language ("commit this", "push it", "committa", "pusha", "fai una release"). Do not use it when the user only asks what changed, or when the change touches nothing but .claude/.
+description: Writes the CHANGELOG.md entry for the work just done, for someone who uses Pino and does not read code, and brings README.md and the docs/ guides up to date in the same pass. Use it whenever the user wants to commit, push or release in this repository, in whatever words or language ("commit this", "push it", "committa", "pusha", "fai una release"). Do not use it when the user only asks what changed, or when the change touches nothing but .claude/.
 ---
 
 # The changelog
 
-`CHANGELOG.md`, at the root of the repository, is where someone who uses Frankino and does not read
+`CHANGELOG.md`, at the root of the repository, is where someone who uses Pino and does not read
 code finds out what is different for them. It is not a list of commits.
 
 ## When it does not run
@@ -23,7 +23,7 @@ code finds out what is different for them. It is not a list of commits.
    git log origin/main..HEAD --oneline --no-merges
    date +%F
    ```
-   Read enough of the diff to answer: what is different for the person using Frankino?
+   Read enough of the diff to answer: what is different for the person using Pino?
 2. **Bring the documentation up to date first**, in the same change:
    - `README.md` for anything a person can see or that changes how the project is laid out;
    - `docs/how-it-works.md` for behaviour, states, cards, tools, what is kept, speed;
@@ -48,7 +48,7 @@ code finds out what is different for them. It is not a list of commits.
 ```
 
 - English, complete sentences, opening with the claim in bold.
-- Say what the person will notice: what Frankino does, says or shows, how long it takes.
+- Say what the person will notice: what Pino does, says or shows, how long it takes.
 - No file, function, table or path names, and no jargon (endpoint, schema, hook, refactor, deploy).
 - Say whether it was tried on the real tablet or only in tests.
 - What was removed or switched off is said as plainly as what was added.

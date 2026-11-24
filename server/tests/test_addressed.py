@@ -2,23 +2,22 @@
 
 import pytest
 
-from frankino.addressed import called, echo, silent, stopped
+from pino.addressed import called, echo, silent, stopped
 
 
 @pytest.mark.parametrize(
     "text",
     [
-        "Franco, che ore sono?",
-        "Ehi Franco, mi senti?",
-        "Ciao Franchino!",
-        "Frankino, metti un timer",
-        "ok Franko",
-        "Hey Franco, what time is it?",
-        "Fraco.",  # misspelled by the transcriber
-        "Frank, tell me a joke",
-        "No, Franco, non così",
-        "Senti Franco, una cosa",
-        "Francò, dimmi",
+        "Pino, che ore sono?",
+        "Ehi Pino, mi senti?",
+        "Ciao Pino!",
+        "Pino, metti un timer",
+        "ok Pino",
+        "Hey Pino, what time is it?",
+        "Pinò, dimmi",
+        "No, Pino, non così",
+        "Senti Pino, una cosa",
+        "Hi Pino, tell me a joke",
     ],
 )
 def test_called(text):
@@ -28,14 +27,14 @@ def test_called(text):
 @pytest.mark.parametrize(
     "text",
     [
-        "Ho visto Franco ieri al mercato",
+        "Ho visto Pino ieri al mercato",
         "La partita alle nove e mezza",
-        "Francesca, vieni a tavola",
-        "Il franco svizzero è salito",
-        "Fanno la partita domani",
-        "Banco di prova",
-        "Francia o Spagna?",
-        "Ehi ehi ehi Franco",  # too many greetings first
+        "Pina, vieni a tavola",
+        "Fino a domani",
+        "Vino rosso, grazie",
+        "Pinoli per il pesto",
+        "Pinocchio ha il naso lungo",
+        "Ehi ehi ehi Pino",  # too many greetings first
         "",
         "Hello",
     ],
@@ -58,7 +57,7 @@ def test_silence():
 
 
 @pytest.mark.parametrize(
-    "text", ["Franco, stop", "basta", "grazie", "ok grazie mille", "Franco basta così", "lascia stare"]
+    "text", ["Pino, stop", "basta", "grazie", "ok grazie mille", "Pino basta così", "lascia stare"]
 )
 def test_stopped(text):
     assert stopped(text)

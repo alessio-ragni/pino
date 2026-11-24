@@ -1,5 +1,5 @@
 #!/bin/bash
-# Creates on AWS everything Frankino needs: a small machine with no open ports, the role that
+# Creates on AWS everything Pino needs: a small machine with no open ports, the role that
 # reads the secrets, the backup bucket. Run it once, from your own computer:
 #
 #   AWS_PROFILE=<profile> deploy/aws/crea.sh
@@ -10,9 +10,9 @@ set -euo pipefail
 
 : "${AWS_PROFILE:?set AWS_PROFILE}"
 export AWS_REGION="${AWS_REGION:-eu-west-1}"
-NAME="${FRANKINO_NAME:-frankino}"
-TYPE="${FRANKINO_INSTANCE_TYPE:-t4g.small}"
-REPO="${FRANKINO_REPO:-https://github.com/alessio-ragni/frankino.git}"
+NAME="${PINO_NAME:-pino}"
+TYPE="${PINO_INSTANCE_TYPE:-t4g.small}"
+REPO="${PINO_REPO:-https://github.com/alessio-ragni/pino.git}"
 PARAMS="/$NAME/"
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
@@ -64,7 +64,7 @@ SG=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=$NAME" "
   --query 'SecurityGroups[0].GroupId' --output text)
 if [ "$SG" = "None" ]; then
   SG=$(aws ec2 create-security-group --group-name "$NAME" --vpc-id "$VPC" \
-    --description "Frankino: no inbound, reachable only through Tailscale" --query GroupId --output text)
+    --description "Pino: no inbound, reachable only through Tailscale" --query GroupId --output text)
 fi
 
 AMI=$(aws ssm get-parameter \

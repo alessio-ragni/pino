@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <!-- Alarms go on the tablet's Clock app, so they ring even if Frankino is down. -->
+    <!-- Alarms go on the tablet's Clock app, so they ring even if Pino is down. -->
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <queries>
@@ -36,19 +36,19 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- Side key held down: Frankino instead of Gemini, when it is the default assistant. -->
+            <!-- Side key held down: Pino instead of Gemini, when it is the default assistant. -->
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="dev.frankino.app.ASCOLTA" />
+                <action android:name="dev.pino.app.ASCOLTA" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <service
-            android:name=".FrankinoService"
+            android:name=".PinoService"
             android:exported="false"
             android:foregroundServiceType="microphone" />
 
@@ -56,8 +56,8 @@
         <service
             android:name=".MicTile"
             android:exported="true"
-            android:icon="@drawable/ic_frankino"
-            android:label="Frankino"
+            android:icon="@drawable/ic_pino"
+            android:label="Pino"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />

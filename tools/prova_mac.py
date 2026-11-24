@@ -55,12 +55,12 @@ async def record_until_enter() -> bytes:
 
 async def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--url", default=os.environ.get("FRANKINO_URL", "ws://127.0.0.1:4390/ws"))
-    ap.add_argument("--token", default=os.environ.get("FRANKINO_TOKEN", ""))
+    ap.add_argument("--url", default=os.environ.get("PINO_URL", "ws://127.0.0.1:4390/ws"))
+    ap.add_argument("--token", default=os.environ.get("PINO_TOKEN", ""))
     ap.add_argument("--scrivi", "--text", dest="scrivi", action="store_true", help="type instead of talking")
     args = ap.parse_args()
     if not args.token:
-        sys.exit("The token is required: --token or FRANKINO_TOKEN in the environment.")
+        sys.exit("The token is required: --token or PINO_TOKEN in the environment.")
 
     _, ensure = _player()
     rate = {"value": 24_000}

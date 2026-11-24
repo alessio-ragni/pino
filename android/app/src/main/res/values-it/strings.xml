@@ -6,7 +6,7 @@
     <string name="state_mic_off">Microfono spento</string>
     <string name="state_mic_off_hint">Tocca il cerchio per una domanda sola</string>
     <string name="state_idle">Aspetto il nome</string>
-    <string name="state_idle_hint">Dì «Franco» o tocca il cerchio</string>
+    <string name="state_idle_hint">Dì «Pino» o tocca il cerchio</string>
     <string name="state_listening">Ti ascolto</string>
     <string name="state_listening_hint">Tocca quando hai finito</string>
     <string name="state_follow">Dimmi pure</string>
@@ -26,19 +26,19 @@
     <string name="no_cards_hint">Chiedi una ricetta, il calendario o la lista della spesa: compare qui, una scheda per argomento.</string>
     <string name="downloading_wake">Scarico la parola d\'avvio: %1$d%%</string>
 
-    <string name="settings_intro">L\'indirizzo del server è il nome del Mac (o del server) su Tailscale, per esempio «mio-mac:4390». Il gettone è il FRANKINO_TOKEN del file .env del server.</string>
+    <string name="settings_intro">L\'indirizzo del server è il nome del Mac (o del server) su Tailscale, per esempio «mio-mac:4390». Il gettone è il PINO_TOKEN del file .env del server.</string>
     <string name="server_address">Indirizzo del server</string>
     <string name="token">Gettone</string>
     <string name="save_connect">Salva e collegati</string>
 
-    <string name="error_mic_permission">Senza il permesso del microfono Frankino non ti sente.</string>
+    <string name="error_mic_permission">Senza il permesso del microfono Pino non ti sente.</string>
     <string name="error_mic">Il microfono non si apre: controlla il permesso.</string>
     <string name="error_wake">Non riesco a preparare la parola d\'avvio: tocca il cerchio per parlare.</string>
     <string name="error_no_ears">Il server non ha la trascrizione: configura la chiave.</string>
     <string name="error_no_voice">Il server non ha la voce: risponderà solo sullo schermo.</string>
 
     <string name="channel_name">Ascolto</string>
-    <string name="channel_description">Frankino è in ascolto del suo nome</string>
+    <string name="channel_description">Pino è in ascolto del suo nome</string>
     <string name="notif_on">Ti ascolto: chiamami per nome</string>
     <string name="notif_off">Microfono spento: non ascolto niente</string>
     <string name="notif_turn_off">Spegni microfono</string>
