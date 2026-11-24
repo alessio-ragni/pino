@@ -6,13 +6,35 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- **Frankino is now Pino.** One personal assistant, one memory, many bodies: today the tablet,
+  tomorrow WhatsApp and a small holographic screen. You call it «Pino», «ehi Pino», «ciao Pino»,
+  «hey Pino»; words that sound like it (vino, fino, pinoli, Pinocchio, pieno) do not wake it. The
+  old names no longer answer.
+- **A new face**: the app icon is Pino, a bright green drop with big eyes.
+- **The app has a new identity on Android**: the old Frankino app has to be uninstalled and the new
+  one installed, then given the server address (now `pino:4390`) and the token again. Cards, alarms,
+  lists and the journal stay on the server and come back.
+- **Kinder words**: Pino's character is warmer and calmer.
+
 ### Added
+
+- **Pino remembers.** It quietly writes down what lasts about you and your people (tastes, habits,
+  family, places) and uses it without being asked: a carbonara suggested the way someone likes it.
+  «Ricordati che…» works too. «Cosa sai di me?» opens a card with everything it knows; say what is
+  wrong or what to forget and it corrects it. Nothing is ever deleted: a forgotten memory ends with
+  the date and the reason.
+- **iampino.com**, Pino's site in English, Italian and Spanish: who Pino is, the story from Franco
+  to Franchino to Pino, all its bodies, and how to plant your own (install it on your server).
+- **A one-off script that turns the Frankino server into Pino** without losing anything
+  (`deploy/aws/migra-a-pino.sh`).
 
 - **A gallery of every kind of card the tablet can draw**: text styles, icons and buttons, a recipe
   with a photo, tabs, a row that scrolls sideways, a form with a text box, choices, date and slider,
   and a pop-up window. It runs on the tablet alone, to see what the screen can do before asking
   for it.
-- **«Basta», «stop», «zitto» on their own stop Frankino at once** while it speaks, thinks or rings,
+- **«Basta», «stop», «zitto» on their own stop Pino at once** while it speaks, thinks or rings,
   without saying its name and without any answer.
 
 ### Changed
@@ -27,7 +49,7 @@ All notable changes to this project are documented here. The format follows
 ### Fixed
 
 - **It no longer gets stuck on «thinking».** When the server decided a sentence was not for
-  Frankino, the tablet stayed on the thinking circle for good. And if no answer comes within 45
+  Pino, the tablet stayed on the thinking circle for good. And if no answer comes within 45
   seconds, it now gives up and goes back to listening.
 - **A question asked right when the conversation was starting afresh** waits for it instead of
   failing.

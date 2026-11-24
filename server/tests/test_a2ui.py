@@ -1,6 +1,6 @@
 import pytest
 
-from frankino.a2ui import Invalid, card_id, check, events_tree, list_tree, recipe_tree, table_tree, validate
+from pino.a2ui import Invalid, card_id, check, events_tree, list_tree, recipe_tree, table_tree, validate
 
 
 def test_adds_version_and_catalog():

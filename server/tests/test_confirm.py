@@ -1,7 +1,7 @@
 import asyncio
 
-from frankino.confirm import Gate, card, is_outward, read_answer
-from frankino.store import Store
+from pino.confirm import Gate, card, is_outward, read_answer
+from pino.store import Store
 
 WA = "mcp__claude_ai_WhatsApp__send_message"
 

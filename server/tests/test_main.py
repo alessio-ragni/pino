@@ -1,6 +1,6 @@
 import logging
 
-from frankino.__main__ import HideToken
+from pino.__main__ import HideToken
 
 
 def test_token_is_hidden_in_logs():

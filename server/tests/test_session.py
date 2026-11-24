@@ -4,13 +4,13 @@ import json
 
 from fastapi.testclient import TestClient
 
-from frankino.app import create_app
+from pino.app import create_app
 
 
 class FakeEars:
     name = "fake"
 
-    def __init__(self, text="Franco, che tempo fa?"):
+    def __init__(self, text="Pino, che tempo fa?"):
         self.text = text
 
     async def transcribe(self, wav):
@@ -26,8 +26,8 @@ class FakeVoice:
 
 
 def _tool(servers, server, name):
-    """The handler of one of Frankino's own tools, as Claude would call it."""
-    from frankino import a2ui, home
+    """The handler of one of Pino's own tools, as Claude would call it."""
+    from pino import a2ui, home
 
     session = servers["_session"]
     if server == "screen":
@@ -97,6 +97,15 @@ class FakeAgent:
             await add({"items": ["latte"]})
             on_text("[card:list-spesa] Fatto.")
             return "[card:list-spesa] Fatto."
+        if "ricordati" in text:
+            remember = _tool(self.servers, "home", "remember")
+            await remember({"fact": "likes green", "about": "me"})
+            on_text("[card:chat] Va bene.")
+            return "[card:chat] Va bene."
+        if "cosa sai" in text:
+            await _tool(self.servers, "home", "memories")({})
+            on_text("[card:memory] Ecco.")
+            return "[card:memory] Ecco."
         on_text("[card:chat] Domani sole. ")
         on_text("Poche nuvole.")
         return "[card:chat] Domani sole. Poche nuvole."
@@ -131,7 +140,7 @@ def _speak(ws, why=None):
     return _messages(ws, "done", "ignored")
 
 
-def _app(settings, text="Franco, che tempo fa?"):
+def _app(settings, text="Pino, che tempo fa?"):
     return create_app(settings, stt=FakeEars(text), tts=FakeVoice(), agent_factory=FakeAgent, bell=False)
 
 
@@ -147,7 +156,7 @@ def test_voice_in_voice_out_and_the_journal(settings):
             assert all("[card" not in m.get("text", "") for m in got)
             assert any(m["type"] == "card" and m["id"] == "chat" for m in got)
         turn = app.state.store.recent_turns()[0]
-        assert turn["asked"] == "Franco, che tempo fa?" and turn["why"] == "name"
+        assert turn["asked"] == "Pino, che tempo fa?" and turn["why"] == "name"
         assert turn["card"] == "chat" and turn["outcome"] == "ok"
         assert turn["ms_first_text"] is not None and turn["ms_first_audio"] is not None
     assert FakeAgent.asked[-1].startswith("[") and "open cards" in FakeAgent.asked[-1]
@@ -179,14 +188,14 @@ def test_with_the_button_no_name_needed(settings):
 
 
 def test_stop_ends_the_conversation(settings):
-    with TestClient(_app(settings, "Franco, basta così")) as client:
+    with TestClient(_app(settings, "Pino, basta così")) as client:
         with client.websocket_connect("/ws?token=prova") as ws:
             _connect(ws)
             assert _speak(ws, "name")[-1] == {"type": "ignored", "reason": "stop"}
 
 
 def test_in_the_follow_up_his_echo_goes(settings):
-    ears = FakeEars("Franco, che tempo fa?")
+    ears = FakeEars("Pino, che tempo fa?")
     app = create_app(settings, stt=ears, tts=FakeVoice(), agent_factory=FakeAgent, bell=False)
     with TestClient(app) as client:
         with client.websocket_connect("/ws?token=prova") as ws:
@@ -218,7 +227,7 @@ def test_in_the_follow_up_if_not_for_him_silent(settings):
 
 
 def test_a_recipe_card_then_a_question_on_it(settings):
-    app = _app(settings, "Franco, la carbonara per due")
+    app = _app(settings, "Pino, la carbonara per due")
     with TestClient(app) as client:
         with client.websocket_connect("/ws?token=prova") as ws:
             _connect(ws)
@@ -230,7 +239,7 @@ def test_a_recipe_card_then_a_question_on_it(settings):
             got = _messages(ws, "done")
             cards = [m for m in got if m["type"] == "card"]
             assert cards[-1]["id"] == "carbonara"
-            assert [t["q"] for t in cards[-1]["thread"]] == ["Franco, la carbonara per due", "quanto pecorino?"]
+            assert [t["q"] for t in cards[-1]["thread"]] == ["Pino, la carbonara per due", "quanto pecorino?"]
             # The second time the surface is updated, not created again.
             assert not any(m["type"] == "a2ui" for m in got)
         store = app.state.store
@@ -248,7 +257,7 @@ def test_a_recipe_card_then_a_question_on_it(settings):
 
 
 def test_shopping_list_tool_draws_its_card(settings):
-    with TestClient(_app(settings, "Franco, metti il latte")) as client:
+    with TestClient(_app(settings, "Pino, metti il latte")) as client:
         with client.websocket_connect("/ws?token=prova") as ws:
             _connect(ws)
             got = _speak(ws, "name")
@@ -281,7 +290,7 @@ def test_no_token_nothing(settings):
 
 
 def test_a_sentence_said_twice_is_said_once():
-    from frankino.session import repeats
+    from pino.session import repeats
 
     first = "Passo due: in una ciotola sbatti le uova intere, i tuorli, il pecorino e una generosa macinata di pepe."
     assert repeats("Siamo al passo due: sbatti insieme uova, tuorli, pecorino e pepe.", [first])
@@ -291,7 +300,7 @@ def test_a_sentence_said_twice_is_said_once():
 
 
 def test_an_alarm_goes_to_the_tablet_clock(settings):
-    with TestClient(_app(settings, "Franco, mettimi una sveglia alle sette")) as client:
+    with TestClient(_app(settings, "Pino, mettimi una sveglia alle sette")) as client:
         with client.websocket_connect("/ws?token=prova") as ws:
             _connect(ws)
             ws.send_json({"type": "start", "why": "name"})
@@ -302,3 +311,20 @@ def test_an_alarm_goes_to_the_tablet_clock(settings):
             ws.send_json({"type": "device_result", "id": device["id"], "ok": True})
             got = _messages(ws, "done")
             assert any(m.get("text") == "Sveglia messa." for m in got)
+
+
+def test_memory_reaches_claude_once_and_again_after_a_change(settings):
+    FakeAgent.asked.clear()
+    with TestClient(_app(settings, "Pino, che tempo fa?")) as client:
+        with client.websocket_connect("/ws?token=prova") as ws:
+            _connect(ws)
+            _speak(ws, "name")
+            assert "what you know: nothing yet" in FakeAgent.asked[-1]
+            ws.send_json({"type": "text", "text": "ricordati che mi piace il verde"})
+            _messages(ws, "done")
+            assert "what you know" not in FakeAgent.asked[-1]
+            ws.send_json({"type": "text", "text": "cosa sai di me?"})
+            got = _messages(ws, "done")
+            assert "#1 me: likes green" in FakeAgent.asked[-1]
+            surfaces = [m["messages"][0] for m in got if m["type"] == "a2ui"]
+            assert surfaces[0]["createSurface"]["surfaceId"] == "memory"

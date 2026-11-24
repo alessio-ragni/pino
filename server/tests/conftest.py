@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from frankino.config import Settings
+from pino.config import Settings
 
 
 @pytest.fixture

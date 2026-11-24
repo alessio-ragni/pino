@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pino's silhouette, a drop with a soft tip: notification and quick settings tile (white, one colour). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M58,4C53,22 14,42 14,65C14,85 30,97 50,97C70,97 86,85 86,65C86,44 64,30 58,4Z" />
+</vector>

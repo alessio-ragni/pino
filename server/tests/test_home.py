@@ -4,10 +4,10 @@ from datetime import datetime
 
 import pytest
 
-from frankino import home
-from frankino.bell import next_repeat, ring_due
-from frankino.home import FMT, parse_when, spoken_when
-from frankino.store import Store
+from pino import home
+from pino.bell import next_repeat, ring_due
+from pino.home import FMT, parse_when, spoken_when
+from pino.store import Store
 
 
 class FakeHost:
@@ -19,6 +19,7 @@ class FakeHost:
         self.missed = []
         self.rung = []
         self.busy = False
+        self.memory = []
 
     async def device_action(self, action):
         self.actions.append(action)
@@ -29,6 +30,9 @@ class FakeHost:
 
     async def list_changed(self, name):
         self.lists.append(name)
+
+    async def memory_changed(self, show=False):
+        self.memory.append(show)
 
     def missing(self, what, why):
         self.missed.append(what)
@@ -67,11 +71,11 @@ async def test_alarm_goes_to_the_clock_and_the_agenda(settings):
     assert store.agenda_live() == []
 
 
-async def test_alarm_too_far_ahead_is_rung_by_frankino(settings):
+async def test_alarm_too_far_ahead_is_rung_by_pino(settings):
     host = FakeHost()
     store, t = _tools(settings, host)
     out = await t["set_alarm"]({"time": "2099-01-01 07:00"})
-    assert "Frankino rings it" in out["content"][0]["text"] and host.actions == []
+    assert "Pino rings it" in out["content"][0]["text"] and host.actions == []
     item = store.agenda_live()[0]
     assert item["on_device"] == 0
     store.agenda_move(item["id"], "2000-01-01 00:00:00")
@@ -138,3 +142,23 @@ async def test_missing_tool_is_logged(settings):
     _, t = _tools(settings, host)
     await t["report_missing"]({"what": "accendere la luce"})
     assert host.missed == ["accendere la luce"]
+
+
+async def test_memory_is_written_silently_and_never_deleted(settings):
+    host = FakeHost()
+    store, t = _tools(settings, host)
+    out = await t["remember"]({"fact": "carbonara with parmigiano, no pecorino", "about": "a friend"})
+    assert "#1" in out["content"][0]["text"]
+    await t["remember"]({"fact": "carbonara with parmigiano, no pecorino", "about": "a friend"})
+    assert len(store.memories()) == 1  # the same thing twice is one memory
+    await t["remember"]({"fact": "likes green", "about": "me"})
+    await t["remember"]({"fact": "likes blue", "about": "me", "replaces": 2})
+    assert [m["fact"] for m in store.memories()] == ["carbonara with parmigiano, no pecorino", "likes blue"]
+    await t["forget"]({"id": 1, "why": "no longer true"})
+    assert [m["fact"] for m in store.memories()] == ["likes blue"]
+    ended = store._rows("SELECT ended_why FROM memories WHERE ended_at IS NOT NULL ORDER BY id")
+    assert [r["ended_why"] for r in ended] == ["no longer true", "corrected"]
+    assert (await t["forget"]({"id": 1})).get("is_error")
+    out = await t["memories"]({})
+    assert "likes blue" in out["content"][0]["text"]
+    assert host.memory == [False, False, False, False, False, True]

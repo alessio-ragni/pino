@@ -4,18 +4,18 @@ plugins {
 }
 
 android {
-    namespace = "dev.frankino.app"
+    namespace = "dev.pino.app"
     // Il renderer A2UI ufficiale (alpha) chiede di compilare con Android 37.1.
     compileSdk {
         version = release(37) { minorApiLevel = 1 }
     }
 
     defaultConfig {
-        applicationId = "dev.frankino.app"
+        applicationId = "dev.pino.app"
         minSdk = 30
         targetSdk = 36
-        versionCode = 20000
-        versionName = "2.0.0"
+        versionCode = 30000
+        versionName = "3.0.0"
         // Il Galaxy Tab A11 (e quasi ogni tablet recente) è arm64: si tengono solo quelle librerie.
         ndk { abiFilters += "arm64-v8a" }
     }

@@ -3,7 +3,7 @@
 import re
 from pathlib import Path
 
-from frankino import __version__
+from pino import __version__
 
 ROOT = Path(__file__).resolve().parents[2]
 

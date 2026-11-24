@@ -1,6 +1,6 @@
 from array import array
 
-from frankino.audio import MAX_GAIN, louder
+from pino.audio import MAX_GAIN, louder
 
 
 def _pcm(values):

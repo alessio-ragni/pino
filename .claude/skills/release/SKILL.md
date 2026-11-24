@@ -1,6 +1,6 @@
 ---
 name: release
-description: Cuts a Frankino release — changelog and docs, tests, version bump everywhere, one commit, push to main, tag vX.Y.Z, a GitHub release with the Android APK attached, the server updated, the app installed on the tablet. Use it when the user asks to release, ship or publish a version ("fai una release", "cut a release", "rilascia la v2", "pubblica"). Do not use it for a plain commit or push: that is the changelog skill alone.
+description: Cuts a Pino release — changelog and docs, tests, version bump everywhere, one commit, push to main, tag vX.Y.Z, a GitHub release with the Android APK attached, the server updated, the app installed on the tablet. Use it when the user asks to release, ship or publish a version ("fai una release", "cut a release", "rilascia la v2", "pubblica"). Do not use it for a plain commit or push: that is the changelog skill alone.
 ---
 
 # Cutting a release
@@ -25,17 +25,17 @@ obvious, or a detached HEAD.
 ## The way out
 
 1. **Changelog and documentation**: follow `.claude/skills/changelog/SKILL.md`.
-2. **Choose the number** from what is under `## [Unreleased]`: a change in how Frankino behaves or
+2. **Choose the number** from what is under `## [Unreleased]`: a change in how Pino behaves or
    in the protocol between tablet and server that an old app cannot follow is a major; new
    behaviour is a minor; fixes only are a patch. Say which and why in one line.
 3. **Bump the version in the three places** (they must agree, `server/tests/test_version.py`
    checks):
-   - `server/frankino/__init__.py` → `__version__`
+   - `server/pino/__init__.py` → `__version__`
    - `server/pyproject.toml` → `version`
    - `android/app/build.gradle.kts` → `versionName`, and `versionCode` = major×10000 + minor×100 + patch
 4. **Close the changelog**: `## [Unreleased]` becomes `## [x.y.z] - YYYY-MM-DD` with a short opening
    paragraph; add a fresh empty `## [Unreleased]` above it and the link
-   `[x.y.z]: https://github.com/alessio-ragni/frankino/releases/tag/vx.y.z` at the bottom.
+   `[x.y.z]: https://github.com/alessio-ragni/pino/releases/tag/vx.y.z` at the bottom.
 5. **Tests, all of them**:
    ```bash
    cd server && .venv/bin/pytest && .venv/bin/ruff check . && .venv/bin/ruff format --check .
@@ -44,10 +44,10 @@ obvious, or a detached HEAD.
 6. **One commit** `release: vx.y.z`, then `git push origin main`.
 7. **Tag and GitHub release**, with the APK and the version's changelog section as notes:
    ```bash
-   git tag -a vx.y.z -m "Frankino vx.y.z" && git push origin vx.y.z
-   cp android/app/build/outputs/apk/debug/app-debug.apk /tmp/frankino-vx.y.z.apk
+   git tag -a vx.y.z -m "Pino vx.y.z" && git push origin vx.y.z
+   cp android/app/build/outputs/apk/debug/app-debug.apk /tmp/pino-vx.y.z.apk
    awk '/^## \[x.y.z\]/{f=1;next} /^## \[/{f=0} f' CHANGELOG.md > /tmp/notes.md
-   gh release create vx.y.z /tmp/frankino-vx.y.z.apk --title "Frankino vx.y.z" --notes-file /tmp/notes.md
+   gh release create vx.y.z /tmp/pino-vx.y.z.apk --title "Pino vx.y.z" --notes-file /tmp/notes.md
    ```
    The APK is the debug build (signed with the debug key): fine for a personal tablet, say so in
    the notes if anyone else may install it.
@@ -56,15 +56,15 @@ obvious, or a detached HEAD.
 9. **Update the server** (it follows `main`):
    ```bash
    AWS_PROFILE=<profile> deploy/aws/remoto.sh aggiorna
-   AWS_PROFILE=<profile> deploy/aws/remoto.sh 'journalctl -u frankino -n 20 --no-pager'
+   AWS_PROFILE=<profile> deploy/aws/remoto.sh 'journalctl -u pino -n 20 --no-pager'
    ```
 10. **Install on the tablet**: `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`,
     open the app, and check with one harmless written question
-    (`adb shell am start -a dev.frankino.app.ASCOLTA --es text "'Franco, che ore sono?'"`) and
+    (`adb shell am start -a dev.pino.app.ASCOLTA --es text "'Pino, che ore sono?'"`) and
     `deploy/aws/remoto.sh registro 1` that the answer arrived.
 
 ## Reporting back
 
 The version and why that number; the commit and where it went; what CI said; the release address
-(`https://github.com/alessio-ragni/frankino/releases/tag/vx.y.z`); whether the server and the tablet
+(`https://github.com/alessio-ragni/pino/releases/tag/vx.y.z`); whether the server and the tablet
 run it; anything skipped and why.

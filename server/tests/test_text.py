@@ -1,4 +1,4 @@
-from frankino.text import Splitter, sentences
+from pino.text import Splitter, sentences
 
 
 def test_in_pieces_sounds_like_all_at_once():

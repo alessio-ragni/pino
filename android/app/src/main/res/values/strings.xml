@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Frankino</string>
+    <string name="app_name" translatable="false">Pino</string>
 
     <!-- States, under the orb. -->
     <string name="state_setup">Needs setting up</string>
@@ -9,7 +9,7 @@
     <string name="state_mic_off">Microphone off</string>
     <string name="state_mic_off_hint">Tap the circle for one question</string>
     <string name="state_idle">Waiting for my name</string>
-    <string name="state_idle_hint">Say «Franco» or tap the circle</string>
+    <string name="state_idle_hint">Say «Pino» or tap the circle</string>
     <string name="state_listening">Listening</string>
     <string name="state_listening_hint">Tap when you\'re done</string>
     <string name="state_follow">Go on</string>
@@ -31,13 +31,13 @@
     <string name="downloading_wake">Downloading the wake word: %1$d%%</string>
 
     <!-- Settings. -->
-    <string name="settings_intro">The server address is the Mac (or server) name on Tailscale, e.g. «my-mac:4390». The token is FRANKINO_TOKEN from the server\'s .env.</string>
+    <string name="settings_intro">The server address is the Mac (or server) name on Tailscale, e.g. «my-mac:4390». The token is PINO_TOKEN from the server\'s .env.</string>
     <string name="server_address">Server address</string>
     <string name="token">Token</string>
     <string name="save_connect">Save and connect</string>
 
     <!-- Errors. -->
-    <string name="error_mic_permission">Without the microphone permission Frankino can\'t hear you.</string>
+    <string name="error_mic_permission">Without the microphone permission Pino can\'t hear you.</string>
     <string name="error_mic">The microphone won\'t open: check the permission.</string>
     <string name="error_wake">Can\'t prepare the wake word: use the circle to talk.</string>
     <string name="error_no_ears">The server has no transcription: configure the key.</string>
@@ -45,7 +45,7 @@
 
     <!-- Notification and quick settings tile. -->
     <string name="channel_name">Listening</string>
-    <string name="channel_description">Frankino is listening for its name</string>
+    <string name="channel_description">Pino is listening for its name</string>
     <string name="notif_on">Listening: call me by name</string>
     <string name="notif_off">Microphone off: not listening</string>
     <string name="notif_turn_off">Turn mic off</string>

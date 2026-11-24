@@ -2,7 +2,7 @@
 
     python3 -m venv /tmp/vosk && /tmp/vosk/bin/pip install vosk
     # model: https://alphacephei.com/vosk/models/vosk-model-small-it-0.22.zip (unzipped)
-    say -v Alice -o test.wav --data-format=LEI16@16000 "Ciao Franco, che ore sono?"
+    say -v Alice -o test.wav --data-format=LEI16@16000 "Ciao Pino, che ore sono?"
     /tmp/vosk/bin/python tools/prova_parola.py <model-dir> test.wav[,other.wav] [settle_ms] [confidence]
 
 Prints WAKE (with the milliseconds) or «-» for each file. If you change the word lists here, change
@@ -16,34 +16,20 @@ import wave
 from vosk import KaldiRecognizer, Model, SetLogLevel
 
 SetLogLevel(-1)
-NAMES = ["franco", "franko", "franchino", "frankino"]
+NAMES = ["pino"]
 GREET = ["ehi", "hey", "hei", "ei", "ciao", "hi"]
 DECOYS = [
-    "franchi",
-    "franca",
-    "franche",
-    "franchezza",
-    "franchigia",
-    "francamente",
-    "francia",
-    "francese",
-    "francesi",
-    "francesco",
-    "franceschi",
-    "franchini",
-    "francobollo",
-    "franchismo",
-    "svizzero",
-    "svizzeri",
-    "svizzera",
-    "porto",
-    "parlo",
-    "parla",
-    "parlava",
-    "trieste",
-    "pagato",
-    "lingua",
-    "vinto",
+    "pina",
+    "pinoli",
+    "pinolo",
+    "pinocchio",
+    "pinot",
+    "spino",
+    "spina",
+    "vino",
+    "fino",
+    "pieno",
+    "piano",
 ]
 MIN_CONF = float(sys.argv[4]) if len(sys.argv) > 4 else 0.5
 SETTLE_MS = int(sys.argv[3]) if len(sys.argv) > 3 else 700
