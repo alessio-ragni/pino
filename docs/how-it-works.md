@@ -107,8 +107,8 @@ without being asked: a recipe adapted to someone's taste, the usual place for a 
 | Cards, alarms, timers, reminders, lists | the server database | cards until closed; the rest is never deleted, only marked as ended |
 | Claude conversations | nowhere: Claude Code does not save them to disk | they start afresh after 10 quiet minutes |
 
-The database has a nightly copy in a private archive on AWS. GitHub holds only the code: no audio,
-no transcripts, no secrets.
+The database is a file on the server. GitHub holds only the code: no audio, no transcripts, no
+secrets.
 
 ## The journal
 
@@ -118,7 +118,7 @@ failed, and whether it asked for confirmation. Discarded recordings, «stop», c
 draw and missing tools are written down too. To read it:
 
 ```bash
-AWS_PROFILE=<profile> deploy/aws/remoto.sh registro 6     # the last 6 hours
+ssh alessio@vps-alessio 'cd pino/server && .venv/bin/python -m pino.journal --db ~/.local/share/pino/pino.db --hours 6'
 ```
 
 or ask Claude in this repository «what did Pino do this morning?».
@@ -140,7 +140,7 @@ or ask Claude in this repository «what did Pino do this morning?».
   transcription → Claude → voice, and each link has been trimmed.
 - **Claude is part of the subscription** of whoever hosts the server: no extra cost per question.
   **OpenAI** (understanding and speaking) is paid per use, about two tenths of a cent per question.
-  **The server** on AWS costs about $15 a month.
+  **The server** is a small VPS that also runs other jobs: Pino adds nothing to its cost.
 
 ## Confirmations
 

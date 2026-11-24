@@ -77,8 +77,9 @@ and how it differs from Claude, explained without code: [`docs/how-it-works.md`]
 
 ## Deployment
 
-Server on AWS inside a Tailscale network, tablet set up over adb, side key instead of Gemini: every
-step is in [`docs/deployment.md`](docs/deployment.md), scripts in `deploy/aws/`.
+Server on any always-on Linux machine inside a Tailscale network (one command,
+`deploy/vps/installa.sh`), tablet set up over adb, side key instead of Gemini: every step is in
+[`docs/deployment.md`](docs/deployment.md).
 
 ## Outward actions
 
@@ -93,7 +94,7 @@ The audio of what you say, for 30 days (then it is deleted, the text stays), the
 journal of every question (timings, tools, errors), the cards, alarms and lists, and the
 permissions. All of it in `PINO_DATA`, never in the repo. Recordings that were not meant for
 Pino (it woke up without anyone calling it) are deleted at once, audio and text. Read the
-journal with `deploy/aws/remoto.sh registro <hours>` or `python -m pino.journal`.
+journal with `python -m pino.journal`.
 
 ## Releases
 
@@ -106,7 +107,9 @@ How a release is cut is in `.claude/skills/release/SKILL.md`.
 
 - `server/` — FastAPI + Claude Agent SDK. Protocol with the tablet: [`docs/protocol.md`](docs/protocol.md).
 - `android/` — the tablet app (Kotlin + Compose).
-- `deploy/aws/` — the AWS machine: creation, first boot, remote commands.
+- `deploy/vps/` — install or update Pino on a Linux server. `deploy/aws/` — the older recipe for a
+  dedicated AWS machine.
+- `site/` — iampino.com (built by `tools/build_site.py`); `brand/` — Pino's look.
 - `tools/` — tools for testing (the Mac acting as a tablet, the wake word).
 
 Changes are listed in [`CHANGELOG.md`](CHANGELOG.md).

@@ -32,7 +32,7 @@ nav a:hover,.langs a:hover,.langs a[aria-current]{color:var(--ink)}
 .kicker{font-family:var(--display);color:var(--green-dark);font-size:1.3rem;margin:0}
 .lead{font-size:1.25rem;color:var(--muted);margin:0}
 .hero-pino{display:grid;place-items:center}
-.hero-pino img{width:min(320px,80%);filter:drop-shadow(0 18px 24px rgba(14,59,20,.18));animation:bob 4s ease-in-out infinite}
+.hero-pino img{width:min(300px,80%);animation:bob 4s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-10px) rotate(-2deg)}}
 @media (prefers-reduced-motion:reduce){.hero-pino img{animation:none}}
 .ctas{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 0}
@@ -49,6 +49,14 @@ nav a:hover,.langs a:hover,.langs a[aria-current]{color:var(--ink)}
 .body p{margin:0;color:var(--muted);font-size:1rem}
 .when{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green-dark)}
 .does{margin:0;padding-left:1.2em;display:grid;gap:8px}
+.faces{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:12px;margin-top:20px}
+.faces figure{margin:0;display:grid;gap:6px;justify-items:center;text-align:center}
+.faces img{height:120px;width:auto;object-fit:contain;transition:transform .2s}
+.faces figure:hover img{transform:translateY(-6px) rotate(-3deg)}
+.faces figcaption{font-family:var(--display);color:var(--muted)}
+.first-try{margin:28px 0 0;display:grid;gap:8px}
+.first-try img{width:100%;max-width:560px;border-radius:18px;border:1px solid var(--line);background:#fff}
+.first-try figcaption{color:var(--muted);font-size:.95rem}
 .plant{display:grid;gap:12px}
 .plant p{margin:0}
 .forest{display:flex;align-items:flex-end;gap:10px;margin-top:24px}
@@ -60,6 +68,8 @@ footer{border-top:1px solid var(--line);padding-block:28px;color:var(--muted);fo
   .hero-pino{order:-1}
   .hero-pino img{width:180px}
   .bodies{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .faces{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .faces img{height:96px}
   .story li{grid-template-columns:1fr;gap:4px}
   nav{display:none}
 }

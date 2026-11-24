@@ -1,8 +1,8 @@
 # Deployment — from a new tablet to Pino answering
 
 This is the path taken the first time, step by step, with a Galaxy Tab A11 (Android 16, One UI
-8.5, menus in English) and the server on AWS. It works for any Android 11+ tablet and any Linux
-machine: only the menu names change.
+8.5, menus in English) and the server on a small Linux VPS. It works for any Android 11+ tablet and
+any Linux machine that stays on: only the menu names change.
 
 How Pino behaves once it is running is explained in [`how-it-works.md`](how-it-works.md); the
 messages between tablet and server are in [`protocol.md`](protocol.md).
@@ -10,23 +10,23 @@ messages between tablet and server are in [`protocol.md`](protocol.md).
 ## How it is built
 
 ```
-Tablet ──Tailscale (private network)──► «pino» machine on AWS (Ubuntu, ARM, t4g.small)
+Tablet ──Tailscale (private network)──► Linux server that stays on (a VPS, a mini PC at home)
   Android app                              Python server + Claude Code (subscription login)
-  - wake word on the tablet                - SQLite and audio on disk, nightly copy to S3
-  - streaming voice                        - secrets in SSM Parameter Store
+  - wake word on the tablet                - SQLite and audio on disk
+  - streaming voice                        - settings and secrets in ~/.config/pino/env
   - A2UI cards                                     │
                                                    ▼
                      OpenAI (understanding and speaking) · Claude (thinking) · claude.ai connectors
 ```
 
 - **No port open to the internet.** The tablet reaches the server only inside the Tailscale
-  network; commands to the machine go through AWS Systems Manager, with no SSH keys.
-- **Secrets are neither in the repo nor on disk:** the OpenAI key and the tablet token live in SSM
-  Parameter Store and are read at every start into a folder that disappears at shutdown.
+  network.
+- **Secrets are not in the repo:** the OpenAI key and the tablet token live in one file on the
+  server, readable only by the user Pino runs as.
 - **The database is a SQLite file.** Everything goes through `server/pino/store.py`: to move to
   Postgres (Supabase or other) you rewrite that file and nothing else.
-- **Cost:** the `t4g.small` machine with 20 GB of disk costs about $15 a month; OpenAI a few cents
-  a day; Claude is part of the subscription.
+- **Cost:** whatever the server costs you (ours is a VPS already used for other jobs); OpenAI a few
+  cents a day; Claude is part of the subscription.
 
 ## What it can do (v3)
 
@@ -47,68 +47,42 @@ Tablet ──Tailscale (private network)──► «pino» machine on AWS (Ubunt
   a «sì», a «no» or a «non chiedermelo più» (yes, no, don't ask me again).
 - Every question is written in a journal with its timings and tools (`remoto.sh registro`).
 
-## 1. The server on AWS
+## 1. The server
 
-You need the AWS CLI with a profile that can create EC2, IAM, S3 and SSM parameters.
-
-```bash
-export AWS_PROFILE=<profilo> AWS_REGION=eu-west-1
-
-# secrets (you make up the token: the tablet will use it to identify itself)
-aws ssm put-parameter --name /pino/OPENAI_API_KEY --type SecureString --value '<chiave OpenAI>'
-aws ssm put-parameter --name /pino/PINO_TOKEN --type SecureString --value "$(openssl rand -hex 24)"
-
-deploy/aws/crea.sh          # machine, role, security group with no inbound rules, backup bucket
-```
-
-In about five minutes the machine installs everything by itself (`deploy/aws/user-data.sh`):
-Python, the repo's code in `/opt/pino`, Claude Code, Tailscale, the `pino` service that
-restarts by itself, and the nightly copy of the database to S3.
-
-Then two steps done by **whoever owns the accounts**, not by a script:
+On the server (Ubuntu, reachable over Tailscale), as the user Pino will run as:
 
 ```bash
-# Tailscale: prints a link, you open it and sign in with your account
-deploy/aws/remoto.sh '(nohup tailscale up --ssh --hostname=pino >/tmp/ts.log 2>&1 &); sleep 8; cat /tmp/ts.log'
-
-# Claude: log in with your own subscription (never ANTHROPIC_API_KEY)
-ssh -t pino@pino .local/bin/claude      # inside: /login, then /exit
+loginctl enable-linger "$USER"                        # services keep running after you log out
+curl -fsSL https://claude.ai/install.sh | bash        # Claude Code, then: claude → /login → /exit
+curl -fsSL https://raw.githubusercontent.com/alessio-ragni/pino/main/deploy/vps/installa.sh | bash
 ```
 
-Everyday commands:
+The first run clones the repo in `~/pino`, prepares Python, and writes `~/.config/pino/env` with a
+fresh token and an empty OpenAI key. Put the key in, run `bash ~/pino/deploy/vps/installa.sh` again,
+and Pino starts as a user service that restarts by itself. Never set `ANTHROPIC_API_KEY`: the
+installer refuses to start if it finds one, because Claude would bill per use.
+
+Everyday commands (ours: `ssh alessio@vps-alessio`):
 
 ```bash
-deploy/aws/remoto.sh aggiorna                                      # git pull + restart
-deploy/aws/remoto.sh segreti                                       # after changing an SSM parameter
-deploy/aws/remoto.sh registro 6                                    # the journal: last 6 hours (English aliases: update, secrets, journal)
-deploy/aws/remoto.sh 'journalctl -u pino -n 50 --no-pager'     # log
+bash ~/pino/deploy/vps/installa.sh                             # update: git pull + restart
+systemctl --user restart pino                                  # after changing ~/.config/pino/env
+journalctl --user -u pino -n 50 --no-pager                     # log
+cd ~/pino/server && .venv/bin/python -m pino.journal --db ~/.local/share/pino/pino.db --hours 6
 ```
 
-The configuration is `/etc/pino/config` on the machine: model, effort, language,
-`PINO_CONNECTORS` (the claude.ai connectors Pino keeps; the others are switched off for it)
-and the rest of `.env.example`. After changing it: `systemctl restart pino`.
+`~/.config/pino/env` holds model, effort, language, `PINO_CONNECTORS` (the claude.ai connectors
+Pino keeps; the others are switched off for it) and the rest of `.env.example`.
 
 Test without a tablet, from a Mac on the same Tailscale network:
 
 ```bash
-cd server && .venv/bin/python ../tools/prova_mac.py --url ws://pino:4390/ws --token <gettone> --scrivi
+cd server && .venv/bin/python ../tools/prova_mac.py --url ws://vps-alessio:4390/ws --token <gettone> --scrivi
 ```
 
-### From Frankino to Pino (once, only for a server created before 3.0)
-
-A machine created when the project was called Frankino keeps working until it is moved over. After
-the rename has been pushed to GitHub (and the GitHub repository renamed `pino`):
-
-```bash
-deploy/aws/migra-a-pino.sh
-```
-
-It copies the secrets to `/pino/` (the token becomes `PINO_TOKEN`), lets the machine's role read
-them, renames on the machine the user, folders, database, settings and services, and calls the
-machine `pino`, on AWS and on Tailscale. Cards, agenda, lists, journal and the Claude login stay.
-The machine's role and backup bucket keep their old names. When Pino answers, delete the old
-`/frankino/` parameters by hand. On the tablet: uninstall the old app, install the new one, server
-`pino:4390` and the same token.
+**On AWS instead:** `deploy/aws/` creates a dedicated machine (EC2, secrets in SSM, nightly copy to
+S3) with `deploy/aws/crea.sh`, and `deploy/aws/remoto.sh` runs commands on it. It is how Pino ran
+until November 2026, when that AWS account was closed; the recipe still works on any account.
 
 ### The site
 

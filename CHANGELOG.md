@@ -14,8 +14,7 @@ All notable changes to this project are documented here. The format follows
   old names no longer answer.
 - **A new face**: the app icon is Pino, a bright green drop with big eyes.
 - **The app has a new identity on Android**: the old Frankino app has to be uninstalled and the new
-  one installed, then given the server address (now `pino:4390`) and the token again. Cards, alarms,
-  lists and the journal stay on the server and come back.
+  one installed, then given the server address and the token again.
 - **Kinder words**: Pino's character is warmer and calmer.
 
 ### Added
@@ -27,8 +26,11 @@ All notable changes to this project are documented here. The format follows
   the date and the reason.
 - **iampino.com**, Pino's site in English, Italian and Spanish: who Pino is, the story from Franco
   to Franchino to Pino, all its bodies, and how to plant your own (install it on your server).
-- **A one-off script that turns the Frankino server into Pino** without losing anything
-  (`deploy/aws/migra-a-pino.sh`).
+- **Pino installs on any always-on Linux server** with one command (`deploy/vps/installa.sh`),
+  and now runs on a small VPS. The AWS machine Frankino lived on is gone with its account: Pino
+  starts with an empty agenda, empty lists and no cards.
+- **The site shows Pino's faces**: eight expressions, and the first try with a little tree on its
+  head.
 
 - **A gallery of every kind of card the tablet can draw**: text styles, icons and buttons, a recipe
   with a photo, tabs, a row that scrolls sideways, a form with a text box, choices, date and slider,

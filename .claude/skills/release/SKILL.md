@@ -55,13 +55,14 @@ obvious, or a detached HEAD.
    not the hope.
 9. **Update the server** (it follows `main`):
    ```bash
-   AWS_PROFILE=<profile> deploy/aws/remoto.sh aggiorna
-   AWS_PROFILE=<profile> deploy/aws/remoto.sh 'journalctl -u pino -n 20 --no-pager'
+   ssh alessio@vps-alessio 'bash ~/pino/deploy/vps/installa.sh'
+   ssh alessio@vps-alessio 'journalctl --user -u pino -n 20 --no-pager'
    ```
 10. **Install on the tablet**: `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`,
     open the app, and check with one harmless written question
     (`adb shell am start -a dev.pino.app.ASCOLTA --es text "'Pino, che ore sono?'"`) and
-    `deploy/aws/remoto.sh registro 1` that the answer arrived.
+    the journal on the server (`ssh alessio@vps-alessio 'cd pino/server && .venv/bin/python -m
+    pino.journal --db ~/.local/share/pino/pino.db --hours 1'`) that the answer arrived.
 
 ## Reporting back
 

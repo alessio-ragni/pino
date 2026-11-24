@@ -53,13 +53,13 @@ cd server
 .venv/bin/python ../tools/prova_mac.py --token <gettone> [--scrivi]
 ```
 
-Server on AWS (the owner's account, profile and region from the environment; steps in
-`docs/deployment.md`):
+Server on the owner's VPS, over Tailscale (steps in `docs/deployment.md`; the AWS account it used
+to live on was closed in November 2026):
 
 ```bash
-AWS_PROFILE=<profile> deploy/aws/remoto.sh aggiorna          # after the push: git pull + restart
-AWS_PROFILE=<profile> deploy/aws/remoto.sh registro 6        # the journal: last 6 hours
-AWS_PROFILE=<profile> deploy/aws/remoto.sh 'journalctl -u pino -n 50 --no-pager'
+ssh alessio@vps-alessio 'bash ~/pino/deploy/vps/installa.sh'            # after the push: pull + restart
+ssh alessio@vps-alessio 'cd pino/server && .venv/bin/python -m pino.journal --db ~/.local/share/pino/pino.db --hours 6'
+ssh alessio@vps-alessio 'journalctl --user -u pino -n 50 --no-pager'
 ```
 
 Android app (Java 17 from Homebrew, SDK in `/opt/homebrew/share/android-commandlinetools`):
