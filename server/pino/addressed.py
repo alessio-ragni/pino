@@ -48,7 +48,9 @@ GREETINGS = frozenset(
 )
 
 # Real words that look like the name: they are not a call.
-NOT_NAMES = frozenset({"pina", "pini", "pine", "pinoli", "pinolo", "pinocchio", "pinot", "spino", "vino", "fino", "pieno"})
+NOT_NAMES = frozenset(
+    {"pina", "pini", "pine", "pinoli", "pinolo", "pinocchio", "pinot", "spino", "vino", "fino", "pieno"}
+)
 
 MAX_GREETINGS = 2
 

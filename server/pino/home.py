@@ -172,8 +172,7 @@ def tools(store: Store, host: Host, tz: str) -> list:
 
     @tool(
         "set_reminder",
-        "Remind the person of something at a given time: Pino says it aloud then. "
-        "time: 'YYYY-MM-DD HH:MM' or 'HH:MM'.",
+        "Remind the person of something at a given time: Pino says it aloud then. time: 'YYYY-MM-DD HH:MM' or 'HH:MM'.",
         {
             "type": "object",
             "properties": {"time": {"type": "string"}, "text": {"type": "string"}},
