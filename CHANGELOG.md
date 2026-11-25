@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-11-25
+
+Frankino becomes Pino: new name, new face, a memory, a site (iampino.com) and a new home on a small
+VPS. Tried on the real tablet with a written question; spoken use is still to be tried at home. The
+APK is a debug build, meant for a personal tablet.
+
 ### Changed
 
 - **Frankino is now Pino.** One personal assistant, one memory, many bodies: today the tablet,
@@ -16,6 +22,12 @@ All notable changes to this project are documented here. The format follows
 - **The app has a new identity on Android**: the old Frankino app has to be uninstalled and the new
   one installed, then given the server address and the token again.
 - **Kinder words**: Pino's character is warmer and calmer.
+- **The conversation stays open longer.** After an answer it keeps listening without the name for
+  20 seconds instead of 5, and after something that was not for it, it keeps listening instead of
+  closing. It also waits for a longer pause (1.2 seconds) before deciding you have finished.
+- **The thinking sound is rarer and softer**: one note every few seconds instead of two notes every
+  second.
+- **Cards follow the tablet's colours and use larger text**, easier to read from across the room.
 
 ### Added
 
@@ -31,22 +43,12 @@ All notable changes to this project are documented here. The format follows
   starts with an empty agenda, empty lists and no cards.
 - **The site shows Pino's faces**: eight expressions, and the first try with a little tree on its
   head.
-
 - **A gallery of every kind of card the tablet can draw**: text styles, icons and buttons, a recipe
   with a photo, tabs, a row that scrolls sideways, a form with a text box, choices, date and slider,
   and a pop-up window. It runs on the tablet alone, to see what the screen can do before asking
   for it.
 - **«Basta», «stop», «zitto» on their own stop Pino at once** while it speaks, thinks or rings,
   without saying its name and without any answer.
-
-### Changed
-
-- **The conversation stays open longer.** After an answer it keeps listening without the name for
-  20 seconds instead of 5, and after something that was not for it, it keeps listening instead of
-  closing. It also waits for a longer pause (1.2 seconds) before deciding you have finished.
-- **The thinking sound is rarer and softer**: one note every few seconds instead of two notes every
-  second.
-- **Cards follow the tablet's colours and use larger text**, easier to read from across the room.
 
 ### Fixed
 
@@ -228,3 +230,4 @@ arrives.
 
 [1.0.0]: https://github.com/alessio-ragni/frankino/releases/tag/v1.0.0
 [2.0.0]: https://github.com/alessio-ragni/frankino/releases/tag/v2.0.0
+[3.0.0]: https://github.com/alessio-ragni/pino/releases/tag/v3.0.0
